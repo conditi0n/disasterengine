@@ -3,25 +3,27 @@
 #include "SDL.h"
 #include "SDL_opengl.h"
 
+#include <iostream>
+
 struct DEGLData
 {
-	SDL_GLContext context = NULL;
+	SDL_GLContext context = NULL; //shallow copy is intentional
 
 	GLuint glProgramID = 0;
 	GLuint glVertexPos2DLocation = -1;
 	GLuint gVBO = 0;
 	GLuint gIBO = 0;
-
-	//TODO: rule of 5
 };
 
-DERenderer::DERenderer() : glData()
+DERenderer::DERenderer()
 {
+	glData = new DEGLData();
 }
 
 
 DERenderer::~DERenderer()
 {
+	delete glData;
 }
 
 bool DERenderer::Init(SDL_GLContext glContext)
@@ -29,7 +31,9 @@ bool DERenderer::Init(SDL_GLContext glContext)
 	glData->context = glContext;
 	if (glData->context == nullptr)
 	{
-		//sdl couldnt get a gl context
+		//TODO: sdl couldnt get a gl context
+		std::cout << "ERROR: GLCONTEXT IS NULL";
+
 		return false;
 	}
 	else
@@ -39,19 +43,25 @@ bool DERenderer::Init(SDL_GLContext glContext)
 
 		if (glewError != GLEW_OK)
 		{
-			//glew error
+			//TODO: glew error
+			std::cout << "ERROR: GLEW ERROR THREW code " + glewError;
+
 			return false;
 		}
 
 		if (SDL_GL_SetSwapInterval(1) < 0) //TODO: vsync, turn it off later
 		{
-			//error setting vsync
+			//TODO: error setting vsync
+			std::cout << "ERROR: COULDN'T GET VSYNC TO ENABLE";
+
 			return false;
 		}
 
 		if (!InitOpenGL())
 		{
-			//error initializing opengl
+			//TODO: error initializing opengl
+			std::cout << "ERROR: COULDN'T INITIALIZE OPENGL";
+
 			return false;
 		}
 	}
@@ -60,5 +70,5 @@ bool DERenderer::Init(SDL_GLContext glContext)
 
 bool DERenderer::InitOpenGL()
 {
-	return false;
+	return true;
 }

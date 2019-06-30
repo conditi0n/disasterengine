@@ -1,12 +1,14 @@
 #include "DEWindow.h"
 #include "SDL.h"
+#include "SDL_events.h"
+#include <iostream>
 
-DEWindow::DEWindow(int width, int height, char* title) : window(NULL), renderer()
+DEWindow::DEWindow(int width, int height, char* title) : renderer(), window(NULL), event(new SDL_Event())
 {
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		//sdl error
+		//TODO: sdl error
 	}
 	else
 	{
@@ -18,20 +20,29 @@ DEWindow::DEWindow(int width, int height, char* title) : window(NULL), renderer(
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 		if (window == NULL)
 		{
-			//window creation error
+			//TODO: window creation error
+			std::cout << "ERROR";
 		}
 		else
 		{
 			renderer.Init(SDL_GL_CreateContext(window));
 		}
-		SDL_Delay(2000);
 	}
+	
 }
 
 
 DEWindow::~DEWindow()
 {
+	delete event;
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
+void DEWindow::Update()
+{
+	while (SDL_PollEvent(event) != 0)
+	{
+		eventID = event->type;
+	}
+}

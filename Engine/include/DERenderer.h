@@ -5,6 +5,7 @@ typedef void* SDL_GLContext;
 
 struct __declspec(dllexport) DERenderer
 {
+	//TODO: rule of 5
 private:
 	struct DEGLData* glData; //pimpl
 
